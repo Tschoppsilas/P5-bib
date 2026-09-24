@@ -1,4 +1,4 @@
-import subprocess, time
+import subprocess, time, sys
 from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -6,8 +6,16 @@ from watchdog.events import FileSystemEventHandler
 REPO = Path(r"C:\Users\silas\OneDrive\FHNW\07_Semester\P5\P5-bib")   # <-- anpassen
 BIB = "references.bib"
 
+CREATE_NO_WINDOW = 0x08000000 if sys.platform == "win32" else 0
+
 def git(*args):
-    return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True)
+    return subprocess.run(
+        ["git", *args],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        creationflags=CREATE_NO_WINDOW,
+    )
 
 class Handler(FileSystemEventHandler):
     last = 0
